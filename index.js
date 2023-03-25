@@ -17,6 +17,7 @@ AWS.config.update({
 
 var fs = require('fs-extra');
 var path = require('path');
+const baseUrl = "http://43.204.149.237"
 
 
 app.use(express.static('build'));
@@ -29,7 +30,7 @@ const emtionsForQuotes = ["FEAR", "CALM", "CONFUSED"];
 
 
 
-app.post('/api/recognize', upload.single("image"), async (req, res, next) => {
+app.post(`${baseUrl}/api/recognize`, upload.single("image"), async (req, res, next) => {
 	var bitmap = fs.readFileSync(req.file.path);
 	rekognition.detectFaces(
 		{
@@ -43,7 +44,7 @@ app.post('/api/recognize', upload.single("image"), async (req, res, next) => {
 		})
 });
 
-app.post('/api/employee', upload.single("image"), function (req, res) {
+app.post(`${baseUrl}/api/employee`, upload.single("image"), function (req, res) {
 	console.log(req.query)
 	var bitmap = fs.readFileSync(req.file.path);
 	const id = `${req.query.name}_:_${req.query.employeeId}`
