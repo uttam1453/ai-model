@@ -25,7 +25,7 @@ function App() {
   const camRef = useRef();
   const inputRef = useRef(null);
 
-  const baseUrl = "http://43.204.149.237"
+  const baseUrl = 'http://43.204.149.237';
 
   const emtionsForJokes = ["SAD", "ANGRY", "DISGUSTED"];
 
@@ -47,7 +47,7 @@ function App() {
     const file = await base64toFile(img, "temp.jpeg", "image/jpeg")
     const formdata = new FormData();
     formdata.append("image", file);
-    axios.post(`${baseUrl}}/api/recognize`, formdata, {
+    axios.post(`${baseUrl}/api/recognize`, formdata, {
       headers: {
         'accept': 'application/json',
         'Accept-Language': 'en-US,en;q=0.8',
