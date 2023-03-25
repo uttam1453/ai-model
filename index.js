@@ -23,14 +23,13 @@ app.use(express.static('build'));
 app.use(cors());
 var rekognition = new AWS.Rekognition({ region: config.region });
 
-const emtionsForJokes = ["SAD", "ANGRY", "DISGUSTED","HAPPY",];
+const emtionsForJokes = ["SAD", "ANGRY", "DISGUSTED", "HAPPY",];
 const emtionsForQuotes = ["FEAR", "CALM", "CONFUSED"];
 //const emtionsForJokes = ["SURPRISED","CALM","FEAR","SAD","ANGRY","CONFUSED","DISGUSTED","HAPPY"];
 
 
 
 app.post('/api/recognize', upload.single("image"), async (req, res, next) => {
-	console.log('here22222')
 	var bitmap = fs.readFileSync(req.file.path);
 	rekognition.detectFaces(
 		{
@@ -39,8 +38,6 @@ app.post('/api/recognize', upload.single("image"), async (req, res, next) => {
 			},
 			"Attributes": ['ALL']
 		}, (err, data) => {
-			//console.log(err)
-			//console.log(data)
 			matchFace(bitmap, res, data);
 			fs.unlinkSync(req.file.path);
 		})

@@ -64,15 +64,15 @@ function App() {
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
     reader.addEventListener('load', (e) => {
-        let contentType = e.target?.result.split(";base64")[0];
-        contentType = contentType.slice(5);
-        if (contentType.includes("jpeg") || contentType.includes("jpg") || contentType.includes("png")) {
-            setImg(e.target?.result);
-        } else {
-            alert("Please select image file");
-        }
+      let contentType = e.target?.result.split(";base64")[0];
+      contentType = contentType.slice(5);
+      if (contentType.includes("jpeg") || contentType.includes("jpg") || contentType.includes("png")) {
+        setImg(e.target?.result);
+      } else {
+        alert("Please select image file");
+      }
     });
-    
+
   }
 
   const callAddEmployee = async (e) => {
@@ -107,7 +107,7 @@ function App() {
             <Row>
               <Col lg="12">
                 {img ?
-                  <img src={img} width="640" height="480"/> :
+                  <img src={img} width="640" height="480" /> :
                   <Webcam ref={camRef} mirrored={false} screenshotFormat="image/jpeg" />
                 }
               </Col>
@@ -123,14 +123,14 @@ function App() {
                 <img src={img} />
               </Col>
               <Col lg="4">
-              <input
-             style={{display: 'none'}}
-        ref={inputRef}
-        type="file"
-        accept="image/png, image/jpeg"
-        onChange={handleFileChange}
-      />
-                <Button onClick={()=>inputRef?.current?.click()} >select file</Button>
+                <input
+                  style={{ display: 'none' }}
+                  ref={inputRef}
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  onChange={handleFileChange}
+                />
+                <Button onClick={() => inputRef?.current?.click()} >select file</Button>
                 <img src={img} />
               </Col>
             </Row>}
@@ -138,7 +138,7 @@ function App() {
             {img && <Row>
 
               <Col lg="12">
-                <Button variant='danger' onClick={() => { setImg();setAddEmployee(false);setDetectFace(false);setDetectFaceDone() }}>Clear</Button>
+                <Button variant='danger' onClick={() => { setImg(); setAddEmployee(false); setDetectFace(false); setDetectFaceDone() }}>Clear</Button>
               </Col>
             </Row>}
 
@@ -160,7 +160,7 @@ function App() {
                 <Button disabled={!img} variant={img ? "primary" : "secondary"} onClick={() => { setAddEmployee(true); setDetectFace(false); setDetectFaceDone() }}>Add new employee</Button>
               </Col>
               <Col md="6">
-                <Button disabled={!img} variant={img ? "primary" : "secondary"} onClick={() => { setDetectFace();setDetectFaceDone();detectface(); setAddEmployee(false) }}>Recognize employee</Button>
+                <Button disabled={!img} variant={img ? "primary" : "secondary"} onClick={() => { setDetectFace(); setDetectFaceDone(); detectface(); setAddEmployee(false) }}>Recognize employee</Button>
               </Col>
             </Row>
             <Row style={{ margin: '30px' }}>
