@@ -1,6 +1,33 @@
-# Getting Started with Cheer me up app
-
+# Cheer Me Up
+Cheer Me Up is an AI-based conversational model that assesses a person's emotional state and provides appropriate methods to uplift their spirits. The model uses natural language processing and machine learning to analyze a person's mood and determine the most effective methods to improve it. This solution is intended to provide a more accessible, personalized, and effective approach to emotional wellness, particularly for those who may not have access to or feel comfortable seeking traditional mental health services.
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+# Backend Architecture
+
+The backend architecture of Cheer Me Up includes the following components:
+
+AWS Rekognition: This component analyzes the images uploaded to the S3 bucket and provides information such as the objects and faces detected in the images.
+
+Mongo DB: This component stores the images that will be analyzed by Rekognition.
+
+Slack Integration: This component allows you to send notification over Slack
+
+AWS IAM: This component manages access to the AWS services and resources used by your backend components.
+
+# FrontEnd Architecture
+
+The frontend of Cheer Me Up is a ReactJS application that allows users to interact with the model and receive recommendations to improve their mood.
+
+# Getting Started
+To use Cheer Me Up, follow these steps:
+
+Create an AWS account and set up the necessary components, including IAM roles
+
+Install the AWS SDK for JavaScript in your ReactJS application.
+
+Implemented code to upload images to the Mongo DB, analyze them with Rekognition, and provide personalized recommendations to the user.
+
+Continuously train and improve the model using machine learning techniques.
 
 ## Available Scripts
 
