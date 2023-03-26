@@ -7,6 +7,7 @@ module.exports = {
     key: process.env.AWS_KEY,
     secret: process.env.AWS_SECRET,
     database: process.env.DATABASE_URL,
+    slackToken: process.env.SLACK_TOKEN,
     // Connect connection with MongoDB Database
     connectDB: function () {
         mongoose.connect(this.database)

@@ -138,7 +138,7 @@ const matchFace = async (bitmap, res, faceDetails) => {
 				//const body = {};
 				axios.post('https://slack.com/api/chat.postMessage', params, {
 					headers: {
-						'Authorization': 'Bearer xoxb-5009389299027-5009401865987-j48wRR0NEMOVnD1kd0V97dz6'
+						'Authorization': `Bearer ${config.slackToken}`
 					}
 				})
 				res.send(response);
