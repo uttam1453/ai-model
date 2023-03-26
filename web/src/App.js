@@ -5,7 +5,8 @@ import {
   Row,
   Col,
   Form,
-  Spinner
+  Spinner,
+  Table,
 } from "react-bootstrap";
 import './App.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -13,6 +14,27 @@ import Webcam from "react-webcam";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+import { Bar } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 
 function App() {
   const [detectFace, setDetectFace] = useState(false);
@@ -22,10 +44,26 @@ function App() {
   const [addEmployee, setAddEmployee] = useState(false);
   const [employeeId, setEmployeeId] = useState();
   const [employeeName, setEmployeeName] = useState();
+  const [tabledata, settabledata] = useState([]);
+  const [data, setdata] = useState();
   const camRef = useRef();
   const inputRef = useRef(null);
 
-  const baseUrl = 'http://43.204.149.237';
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Emotion - Time Ananlysis',
+      },
+    },
+  };
+
+  const baseUrl = 'http://localhost:8080';
 
   const emtionsForJokes = ["SAD", "ANGRY", "DISGUSTED"];
 
@@ -54,7 +92,6 @@ function App() {
         'Content-Type': `multipart/form-data; boundary=${formdata._boundary}`,
       }
     }).then(res => {
-      console.log(res);
       setIsLoading(false);
       setDetectFaceDone(res.data)
       setDetectFace(true);
@@ -83,7 +120,7 @@ function App() {
     const formdata = new FormData();
     formdata.append("image", file);
     const empName = employeeName.replaceAll(" ", ".")
-    axios.post(`${baseUrl}/api/employee?name=${empName}&employeeId=${employeeId}`, formdata, {
+    axios.post(`${baseUrl}/api/employee?name=${employeeName}&employeeId=${employeeId}`, formdata, {
       headers: {
         'accept': 'application/json',
         'Accept-Language': 'en-US,en;q=0.8',
@@ -94,14 +131,44 @@ function App() {
       setEmployeeId();
       setEmployeeName();
       toast.success("Employee details added successfully")
+    }).catch(res => {
+      setIsLoading(false);
+      toast.error("Employee id already exists")
     })
 
 
   }
 
+  const showMore = () => {
+    axios.get(`${baseUrl}/api/employee/${detectFaceDone.employeeId}`).then(res => {
+      settabledata(res.data.emotions)
+      var counts = res.data.emotions.reduce((p, c) => {
+
+        var name = c.emotion;
+        if (!p.hasOwnProperty(name)) {
+          p[name] = 0;
+        }
+        p[name]++;
+        return p;
+      }, {});
+      const data = {
+        labels: Object.keys(counts),
+        datasets: [
+          {
+            label: 'Emotions',
+            data: Object.values(counts),
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          }
+        ],
+      };
+      setdata(data);
+
+    })
+  }
+
   return (
     <div className="App">
-      <ToastContainer />
+      <ToastContainer theme="colored" />
       <Container fluid>
         <Row style={{ margin: '20px' }}><Col lg="12"><h1>Cheer me up!!!</h1></Col></Row>
         <Row>
@@ -146,16 +213,6 @@ function App() {
 
           </Col>
 
-
-
-
-
-
-
-
-
-
-
           <Col lg="6">
             <Row>
               <Col md="6">
@@ -193,9 +250,43 @@ function App() {
                     Submit
                   </Button>
                 </Form>
+
                 }
               </Col>
             </Row>
+            <Row style={{ margin: '30px' }}>
+              <Col lg="12">
+                <Button variant="primary" onClick={(e) => { showMore() }} >Show more details </Button>
+              </Col>
+            </Row>
+            <Row style={{ margin: '30px' }}>
+              <Col lg="12">
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Emotion</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tabledata?.map((t, i) =>
+                      <tr>
+                        <th>{i + 1}</th>
+                        <th style={{ color: emtionsForJokes.includes(t.emotion) ? 'RED' : "GREEN" }}>{t.emotion}</th>
+                        <th>{t.date}</th>
+                      </tr>
+                    )}
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
+            {tabledata.length > 0 &&
+              <Row style={{ margin: '30px' }}>
+                <Col lg="12">
+                  <Bar options={options} data={data} />
+                </Col>
+              </Row>}
           </Col>
         </Row>
 
