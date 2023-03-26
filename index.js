@@ -102,7 +102,7 @@ const matchFace = async (bitmap, res, faceDetails) => {
 		} else {
 			if (data.FaceMatches && data.FaceMatches.length > 0 && data.FaceMatches[0].Face) {
 				const employee = await Employee.find({ employeeId: data.FaceMatches[0].Face.ExternalImageId }).exec();
-				const emotion = faceDetails.FaceDetails[0].Emotions.filter(e => e.Confidence > 40)
+				const emotion = faceDetails.FaceDetails[0].Emotions.filter(e => e.Confidence > 70)
 				if (employee.length > 0) {
 					const data = {
 						emotion: emotion.length > 0 ? emotion[0].Type : 'NO-DETECT',
@@ -122,7 +122,7 @@ const matchFace = async (bitmap, res, faceDetails) => {
 					isSleeping: faceDetails.FaceDetails[0].EyesOpen.value,
 					ageRange: `${faceDetails.FaceDetails[0].AgeRange.Low}-${faceDetails.FaceDetails[0].AgeRange.High} years`,
 					gender: faceDetails.FaceDetails[0].Gender.value,
-					//extra: faceDetails
+					extra: faceDetails
 
 				}
 
